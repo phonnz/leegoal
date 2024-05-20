@@ -16,9 +16,7 @@ defmodule Leegoal.Documents do
 
   """
   def list_documents do
-    [
-      Document.new()
-    ]
+    Leegoal.Documents.Worder.list_all()
   end
 
   def get_docs() do

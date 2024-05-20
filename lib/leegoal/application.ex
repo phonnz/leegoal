@@ -12,7 +12,7 @@ defmodule Leegoal.Application do
       {DNSCluster, query: Application.get_env(:leegoal, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Leegoal.PubSub},
       # Start a worker by calling: Leegoal.Worker.start_link(arg)
-      # {Leegoal.Worker, arg},
+      {Leegoal.Documents.Worder, []},
       # Start to serve requests, typically the last entry
       LeegoalWeb.Endpoint
     ]

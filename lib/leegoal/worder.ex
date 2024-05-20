@@ -1,18 +1,19 @@
 defmodule Leegoal.Documents.Worder do
   use GenServer
   alias Leegoal.Documents
+  @self __MODULE__
   # Client
 
-  def start_link(default \\ %{}) when is_map(default) do
-    GenServer.start_link(__MODULE__, default)
+  def start_link(default \\ []) when is_list(default) do
+    GenServer.start_link(__MODULE__, default, name: @self)
   end
 
   def push(pid, element) do
     GenServer.cast(pid, {:push, element})
   end
 
-  def list_all(pid) do
-    GenServer.call(pid, :pop)
+  def list_all() do
+    GenServer.call(@self, :pop)
   end
 
   # Server (callbacks)
@@ -42,7 +43,7 @@ defmodule Leegoal.Documents.Worder do
   @impl true
   def handle_info(:work, state) do
     new_document = Documents.new()
-    state = Map.put(state, new_document.id, new_document)
+    state = [new_document | state]
     schedule_work()
 
     {:noreply, state}
