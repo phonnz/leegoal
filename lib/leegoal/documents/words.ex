@@ -44,5 +44,7 @@ defmodule Leegoal.Documents.Words do
 
   def new_content() do
     Enum.take_random(@words, 5)
+    |> Enum.shuffle()
+    |> Enum.join(" ")
   end
 end

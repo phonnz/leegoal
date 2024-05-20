@@ -20,4 +20,10 @@ defmodule Leegoal.Documents do
       Document.new()
     ]
   end
+
+  def get_docs() do
+    []
+  end
+
+  def new, do: Document.new()
 end

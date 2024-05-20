@@ -6,7 +6,10 @@ defmodule LeegoalWeb.DocumentLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :documents, %{})}
+    {:ok,
+     socket
+     |> stream(:documents, Documents.list_documents())
+     |> assign(:search_term, "")}
   end
 
   @impl true
