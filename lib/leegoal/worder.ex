@@ -2,21 +2,18 @@ defmodule Leegoal.Documents.Worder do
   use GenServer
   alias Leegoal.Documents
   @self __MODULE__
-  # Client
 
   def start_link(default \\ []) when is_list(default) do
     GenServer.start_link(__MODULE__, default, name: @self)
   end
 
-  def push(pid, element) do
-    GenServer.cast(pid, {:push, element})
+  def get(terms) do
+    GenServer.cast(@self, {:get, terms})
   end
 
   def list_all() do
-    GenServer.call(@self, :pop)
+    GenServer.call(@self, :list)
   end
-
-  # Server (callbacks)
 
   @impl true
   def init(state) do
@@ -25,19 +22,19 @@ defmodule Leegoal.Documents.Worder do
 
   @impl true
   def handle_continue(:generate, state) do
-    Process.send_after(self(), :work, 1_000)
+    Process.send_after(self(), :work, 30_000)
     {:noreply, state}
   end
 
   @impl true
-  def handle_call(:pop, _from, state) do
+  def handle_call(:list, _from, state) do
     {:reply, state, state}
   end
 
   @impl true
-  def handle_cast({:push, element}, state) do
-    new_state = [element | state]
-    {:noreply, new_state}
+  def handle_call({:get, terms}, _from, state) do
+    result_documents = Documents.find(state, terms)
+    {:reply, result_documents, state}
   end
 
   @impl true
